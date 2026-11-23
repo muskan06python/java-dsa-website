@@ -1,0 +1,373 @@
+/* =========================================================
+   Design tokens
+========================================================= */
+:root{
+  --bg:        #14231D;   /* deep pine */
+  --bg-soft:   #1B2E24;
+  --panel:     #1F3327;
+  --line:      #2E4A3B;   /* contour / hairline color */
+  --ink:       #EEEAE0;   /* primary text, warm off-white */
+  --dim:       #86A08F;   /* muted sage, secondary text */
+  --blaze:     #E2812E;   /* trail-blaze orange — the one accent */
+  --blaze-soft:#4A3320;
+  --paper:     #E7DFC6;   /* permit-slip paper */
+  --paper-ink: #2A2418;   /* dark text on paper */
+  --paper-line:#C9BE9C;
+}
+
+* { box-sizing: border-box; }
+:focus-visible { outline: 2px solid var(--blaze); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  /* faint engraved-plate hatch, on-subject for a printed trail map rather than a UI grid */
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(238,234,224,0.025) 0px,
+    rgba(238,234,224,0.025) 1px,
+    transparent 1px,
+    transparent 7px
+  );
+  color: var(--ink);
+  font-family: 'Work Sans', sans-serif;
+  min-height: 100vh;
+}
+
+/* ===== Header ===== */
+header {
+  padding: 22px 32px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(20, 35, 29, 0.9);
+}
+
+.header-inner {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Bitter', serif;
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: 0.01em;
+}
+.brand-mark { color: var(--blaze); font-size: 16px; transform: rotate(0deg); }
+
+.eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--dim);
+}
+
+/* ===== Layout ===== */
+main {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  min-height: calc(100vh - 78px);
+}
+
+@media (max-width: 880px) {
+  main { grid-template-columns: 1fr; }
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+  padding: 24px;
+  border-right: 1px solid var(--line);
+  background: var(--bg-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.log-card, .legend-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 20px;
+}
+
+.log-title {
+  font-family: 'Bitter', serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0 0 16px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.log-title::before {
+  content: '';
+  width: 3px;
+  height: 14px;
+  background: var(--blaze);
+  display: inline-block;
+}
+
+.field-group { margin-bottom: 14px; }
+
+label {
+  display: block;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 7px;
+}
+.field-hint { color: var(--blaze); text-transform: none; letter-spacing: 0; }
+
+select {
+  width: 100%;
+  padding: 11px 14px;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-family: 'Work Sans', sans-serif;
+  font-size: 14px;
+  border-radius: 2px;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--dim) 50%),
+                     linear-gradient(135deg, var(--dim) 50%, transparent 50%);
+  background-position: calc(100% - 16px) center, calc(100% - 11px) center;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+select:hover { border-color: var(--dim); }
+
+.swap-btn {
+  width: 100%;
+  padding: 8px 4px;
+  margin-bottom: 14px;
+  background: none;
+  border: none;
+  color: var(--dim);
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.swap-btn:hover { color: var(--blaze); }
+
+.find-btn {
+  width: 100%;
+  padding: 13px;
+  background: var(--blaze);
+  color: #201002;
+  border: none;
+  border-radius: 2px;
+  font-family: 'Bitter', serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+.find-btn:hover { filter: brightness(1.1); }
+.find-btn:active { transform: scale(0.98); }
+
+/* ===== Legend list (numbered trail markers) ===== */
+.legend-list {
+  list-style: none;
+  counter-reset: marker;
+  margin: 0;
+  padding: 0;
+}
+.legend-list li {
+  counter-increment: marker;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 13px;
+  color: var(--dim);
+}
+.legend-list li:last-child { border-bottom: none; }
+.legend-list li::before {
+  content: counter(marker);
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--dim);
+  color: var(--dim);
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== Map area ===== */
+.map-area {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.map-frame {
+  position: relative;
+  flex: 1;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--bg-soft);
+  overflow: hidden;
+  min-height: 440px;
+}
+
+svg#map-svg { width: 100%; height: 100%; display: block; }
+
+/* ===== SVG map elements ===== */
+.contour {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+  opacity: 0.5;
+}
+
+.compass text {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  fill: var(--dim);
+  text-anchor: middle;
+}
+.compass line { stroke: var(--dim); stroke-width: 1; opacity: 0.6; }
+.compass circle { fill: none; stroke: var(--dim); stroke-width: 1; opacity: 0.4; }
+
+.edge-path {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 2;
+}
+.edge-path.active {
+  stroke: var(--blaze);
+  stroke-width: 2.5;
+  stroke-dasharray: 9 7;
+  animation: dash 1.1s linear infinite;
+}
+@keyframes dash { to { stroke-dashoffset: -32; } }
+
+.blaze-mark {
+  fill: var(--blaze);
+  stroke: var(--bg-soft);
+  stroke-width: 1;
+  opacity: 0;
+  animation: blazeIn 0.4s ease forwards;
+}
+@keyframes blazeIn { to { opacity: 1; } }
+
+.node-post circle {
+  fill: var(--panel);
+  stroke: var(--dim);
+  stroke-width: 1.5;
+  transition: all 0.25s ease;
+}
+.node-post text.num {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  fill: var(--dim);
+  text-anchor: middle;
+  dominant-baseline: central;
+  transition: fill 0.25s ease;
+}
+.node-post.active circle { fill: var(--blaze-soft); stroke: var(--blaze); }
+.node-post.active text.num { fill: var(--ink); }
+.node-post.endpoint circle { fill: var(--blaze); stroke: var(--blaze); }
+.node-post.endpoint text.num { fill: #201002; font-weight: 700; }
+
+.node-label {
+  font-family: 'Work Sans', sans-serif;
+  font-size: 12px;
+  fill: var(--dim);
+  text-anchor: middle;
+}
+.node-label.active { fill: var(--ink); font-weight: 600; }
+
+/* ===== Permit / readout card ===== */
+.permit {
+  margin-top: 16px;
+  background: var(--paper);
+  color: var(--paper-ink);
+  border-radius: 3px;
+  padding: 16px 22px;
+  display: none;
+  grid-template-columns: 1fr auto;
+  gap: 12px 28px;
+  align-items: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+.permit.show { display: grid; }
+
+.permit-row { grid-column: 1; }
+.permit-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #6B6248;
+  margin-bottom: 4px;
+}
+.permit-route {
+  font-family: 'Bitter', serif;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.permit-route .stop::after { content: ' \2192 '; color: var(--blaze); font-weight: 400; }
+.permit-route .stop:last-child::after { content: ''; }
+
+.permit-stats {
+  grid-column: 2;
+  display: flex;
+  gap: 26px;
+}
+.permit-stat { text-align: center; }
+.permit-value {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 24px;
+  color: var(--paper-ink);
+  border-bottom: 2px solid var(--blaze);
+  padding-bottom: 2px;
+}
+.permit-unit {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6B6248;
+  margin-top: 4px;
+}
+
+.empty-msg {
+  font-family: 'Work Sans', sans-serif;
+  font-style: italic;
+  color: #6B6248;
+}
+
+@media (max-width: 600px) {
+  .permit { grid-template-columns: 1fr; text-align: left; }
+  .permit-stats { grid-column: 1; justify-content: flex-start; }
+}
